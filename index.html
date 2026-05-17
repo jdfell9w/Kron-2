@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Schrödinger Circuit Exhibit — WebXR v3.8.6</title>
+  <title>Schrödinger Circuit Exhibit — WebXR v3.9</title>
   <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
   <style>
     html, body { margin: 0; width: 100%; height: 100%; background: #02040a; }
@@ -109,17 +109,17 @@ AFRAME.registerComponent('schrodinger-cube-v38', {
 
     // Adjusted to match the reference: a larger back/left face and a smaller right/leading face.
     const nodes = [
-      new THREE.Vector3(-13.0, -8.6,  1.2),  // 0 bottom-left back face
-      new THREE.Vector3( -1.0, -8.1,  1.0),  // 1 lower inner front/back connector
-      new THREE.Vector3(  1.6,  4.2,  1.1),  // 2 upper inner shared node
-      new THREE.Vector3( -8.2,  9.0,  1.2),  // 3 top-left back face
-      new THREE.Vector3( -1.3, -0.5, -1.1),  // 4 central front-lower shared node
-      new THREE.Vector3(  7.0, -2.6, -0.7),  // 5 bottom-right smaller face
-      new THREE.Vector3(  8.8,  4.8, -0.6),  // 6 upper-right smaller face
-      new THREE.Vector3(  0.8,  8.4, -1.0)   // 7 upper-back/front connector
+      new THREE.Vector3(-13.0, -8.0,  4.2),  // 0 back square lower-left
+      new THREE.Vector3( -0.8, -7.8,  4.0),  // 1 back square lower-right
+      new THREE.Vector3(  1.6,  4.6,  3.9),  // 2 back square upper-right
+      new THREE.Vector3( -8.4,  9.2,  4.1),  // 3 back square upper-left
+      new THREE.Vector3( -0.55, -1.55, -5.25), // 4 front square lower-left (slightly smaller, farther forward)
+      new THREE.Vector3(  6.90, -1.42, -5.40), // 5 front square lower-right
+      new THREE.Vector3(  8.36,  5.68, -5.48), // 6 front square upper-right
+      new THREE.Vector3(  2.27,  8.48, -5.33)  // 7 front square upper-left
     ];
     const edges = [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
-    const edgeComponentMap = {0:'coil',1:'coil',2:'coil',3:'cap',4:'coil',5:'coil',6:'coil',7:'coil',8:'cap',9:'coil',10:'cap',11:'coil'};
+    const edgeComponentMap = {0:'coil',1:'coil',2:'coil',3:'coil',4:'coil',5:'coil',6:'coil',7:'coil',8:'coil',9:'coil',10:'coil',11:'coil'};
 
     function rod(groupTarget, p0, p1, radius, mat) {
       const dir = new THREE.Vector3().subVectors(p1, p0);
@@ -173,25 +173,21 @@ AFRAME.registerComponent('schrodinger-cube-v38', {
       if (normal.length() < 0.001) normal = radial.clone();
       normal.normalize();
 
-      // Back-face edges keep the original gentle bow.
-      let bow = 0.58 + p0.distanceTo(p1) * 0.032;
-
-      // Front-face edges (the smaller right/leading square) are less curved.
-      if (edgeIndex >= 4 && edgeIndex <= 7) {
-        bow = 0.24 + p0.distanceTo(p1) * 0.014;
-      }
-
+      // Back-face and front-face square edges are only slightly convex.
+      let bow = 0.18 + p0.distanceTo(p1) * 0.010;
       let control = mid.clone().add(normal.multiplyScalar(bow));
-      if (edgeIndex === 3) control.y += 0.10;
+      if (edgeIndex === 3) control.y += 0.03;
 
-      // Only the four connecting struts (indices 8-11) bow inward more strongly.
+      // Only the four connecting struts (indices 8-11) arc inward like power lines.
       if (edgeIndex >= 8) {
         const inward = interiorCenter.clone().sub(mid);
         if (inward.length() > 0.001) inward.normalize();
         else inward.set(0, 0, -1);
+        const sag = new THREE.Vector3(0, -0.70, 0);
         control = mid.clone()
-          .add(inward.multiplyScalar(1.65))
-          .add(normal.clone().multiplyScalar(0.10));
+          .add(inward.multiplyScalar(1.75))
+          .add(normal.clone().multiplyScalar(0.14))
+          .add(sag);
       }
       return new THREE.QuadraticBezierCurve3(p0, control, p1);
     }
@@ -260,10 +256,10 @@ AFRAME.registerComponent('schrodinger-cube-v38', {
     }
 
     nodes.forEach((p, i) => {
-      const s = new THREE.Mesh(new THREE.SphereGeometry(0.72, 26, 26), nodeMat);
+      const s = new THREE.Mesh(new THREE.SphereGeometry(0.14, 18, 18), nodeMat);
       s.position.copy(p);
       cubeGroup.add(s);
-      const h = new THREE.Mesh(new THREE.SphereGeometry(1.08, 18, 18), new THREE.MeshBasicMaterial({color:0x7aa0ff,transparent:true,opacity:0.13}));
+      const h = new THREE.Mesh(new THREE.SphereGeometry(0.21, 12, 12), new THREE.MeshBasicMaterial({color:0x7aa0ff,transparent:true,opacity:0.13}));
       h.position.copy(p);
       cubeGroup.add(h);
       addNodeMotif(i);
@@ -319,7 +315,7 @@ AFRAME.registerComponent('schrodinger-cube-v38', {
   <a-entity light="type: point; color: #c06dff; intensity: 0.82; distance: 36" position="-8 6 -2"></a-entity>
 
   <a-entity id="rig" position="0 1.6 165">
-    <a-camera id="cam" wasd-controls-enabled="true" fov="95"></a-camera>
+    <a-camera id="cam" wasd-controls-enabled="true" fov="90"></a-camera>
     <a-entity laser-controls="hand: left" move-thumbstick></a-entity>
     <a-entity laser-controls="hand: right" snap-turn></a-entity>
   </a-entity>
@@ -327,46 +323,46 @@ AFRAME.registerComponent('schrodinger-cube-v38', {
   <a-entity schrodinger-cube-v38></a-entity>
 
   <a-entity id="cubeAnchor" position="0 2.6 0" visible="false"></a-entity>
-      <a-entity id="panelRing">
-    <a-entity position="92.0 16.0 0.0" face-target-y="target: #cubeAnchor">
+            <a-entity id="panelRing">
+    <a-entity position="87.144 18.0 -12.247" face-target-y="target: #cubeAnchor">
       <a-plane width="19.0" height="14.2" color="#050b16" material="transparent:true; opacity:0.16; side:double"></a-plane>
-      <a-image width="18.0" height="13.5" position="0 0 0.03" material="shader: flat; transparent: true; side: double" src="#panel01"></a-image>
+      <a-image src="#panel01" width="18.0" height="13.5" position="0 0 0.03" material="shader: flat; transparent: true; side: double"></a-image>
     </a-entity>
-    <a-entity position="74.43 11.0 54.076" face-target-y="target: #cubeAnchor">
+    <a-entity position="82.997 18.0 44.13" face-target-y="target: #cubeAnchor">
       <a-plane width="19.0" height="14.2" color="#050b16" material="transparent:true; opacity:0.16; side:double"></a-plane>
-      <a-image width="18.0" height="13.5" position="0 0 0.03" material="shader: flat; transparent: true; side: double" src="#panel02"></a-image>
+      <a-image src="#panel02" width="18.0" height="13.5" position="0 0 0.03" material="shader: flat; transparent: true; side: double"></a-image>
     </a-entity>
-    <a-entity position="28.43 16.0 87.497" face-target-y="target: #cubeAnchor">
+    <a-entity position="38.577 16.0 79.094" face-target-y="target: #cubeAnchor">
       <a-plane width="19.0" height="14.2" color="#050b16" material="transparent:true; opacity:0.16; side:double"></a-plane>
-      <a-image width="18.0" height="13.5" position="0 0 0.03" material="shader: flat; transparent: true; side: double" src="#panel03"></a-image>
+      <a-image src="#panel03" width="18.0" height="13.5" position="0 0 0.03" material="shader: flat; transparent: true; side: double"></a-image>
     </a-entity>
-    <a-entity position="-28.43 11.0 87.497" face-target-y="target: #cubeAnchor">
+    <a-entity position="-15.281 13.0 86.663" face-target-y="target: #cubeAnchor">
       <a-plane width="19.0" height="14.2" color="#050b16" material="transparent:true; opacity:0.16; side:double"></a-plane>
-      <a-image width="18.0" height="13.5" position="0 0 0.03" material="shader: flat; transparent: true; side: double" src="#panel04"></a-image>
+      <a-image src="#panel04" width="18.0" height="13.5" position="0 0 0.03" material="shader: flat; transparent: true; side: double"></a-image>
     </a-entity>
-    <a-entity position="-74.43 16.0 54.076" face-target-y="target: #cubeAnchor">
+    <a-entity position="-63.302 18.0 61.13" face-target-y="target: #cubeAnchor">
       <a-plane width="19.0" height="14.2" color="#050b16" material="transparent:true; opacity:0.16; side:double"></a-plane>
-      <a-image width="18.0" height="13.5" position="0 0 0.03" material="shader: flat; transparent: true; side: double" src="#panel05"></a-image>
+      <a-image src="#panel05" width="18.0" height="13.5" position="0 0 0.03" material="shader: flat; transparent: true; side: double"></a-image>
     </a-entity>
-    <a-entity position="-92.0 11.0 0.0" face-target-y="target: #cubeAnchor">
+    <a-entity position="-87.144 13.0 12.247" face-target-y="target: #cubeAnchor">
       <a-plane width="19.0" height="14.2" color="#050b16" material="transparent:true; opacity:0.16; side:double"></a-plane>
-      <a-image width="18.0" height="13.5" position="0 0 0.03" material="shader: flat; transparent: true; side: double" src="#panel06"></a-image>
+      <a-image src="#panel06" width="18.0" height="13.5" position="0 0 0.03" material="shader: flat; transparent: true; side: double"></a-image>
     </a-entity>
-    <a-entity position="-74.43 16.0 -54.076" face-target-y="target: #cubeAnchor">
+    <a-entity position="-77.699 17.0 -41.313" face-target-y="target: #cubeAnchor">
       <a-plane width="19.0" height="14.2" color="#050b16" material="transparent:true; opacity:0.16; side:double"></a-plane>
-      <a-image width="18.0" height="13.5" position="0 0 0.03" material="shader: flat; transparent: true; side: double" src="#panel07"></a-image>
+      <a-image src="#panel07" width="18.0" height="13.5" position="0 0 0.03" material="shader: flat; transparent: true; side: double"></a-image>
     </a-entity>
-    <a-entity position="-28.43 11.0 -87.497" face-target-y="target: #cubeAnchor">
+    <a-entity position="-38.577 13.0 -79.094" face-target-y="target: #cubeAnchor">
       <a-plane width="19.0" height="14.2" color="#050b16" material="transparent:true; opacity:0.16; side:double"></a-plane>
-      <a-image width="18.0" height="13.5" position="0 0 0.03" material="shader: flat; transparent: true; side: double" src="#panel08"></a-image>
+      <a-image src="#panel08" width="18.0" height="13.5" position="0 0 0.03" material="shader: flat; transparent: true; side: double"></a-image>
     </a-entity>
-    <a-entity position="28.43 16.0 -87.497" face-target-y="target: #cubeAnchor">
+    <a-entity position="15.281 18.0 -86.663" face-target-y="target: #cubeAnchor">
       <a-plane width="19.0" height="14.2" color="#050b16" material="transparent:true; opacity:0.16; side:double"></a-plane>
-      <a-image width="18.0" height="13.5" position="0 0 0.03" material="shader: flat; transparent: true; side: double" src="#panel09"></a-image>
+      <a-image src="#panel09" width="18.0" height="13.5" position="0 0 0.03" material="shader: flat; transparent: true; side: double"></a-image>
     </a-entity>
-    <a-entity position="74.43 11.0 -54.076" face-target-y="target: #cubeAnchor">
+    <a-entity position="63.302 14.0 -61.13" face-target-y="target: #cubeAnchor">
       <a-plane width="19.0" height="14.2" color="#050b16" material="transparent:true; opacity:0.16; side:double"></a-plane>
-      <a-image width="18.0" height="13.5" position="0 0 0.03" material="shader: flat; transparent: true; side: double" src="#panel10"></a-image>
+      <a-image src="#panel10" width="18.0" height="13.5" position="0 0 0.03" material="shader: flat; transparent: true; side: double"></a-image>
     </a-entity>
   </a-entity>
 
@@ -374,11 +370,11 @@ AFRAME.registerComponent('schrodinger-cube-v38', {
   
 <a-entity position="0 10.8 0" billboard-y>
     <a-plane width="6.2" height="0.86" color="#071121" material="transparent:true; opacity:0.50"></a-plane>
-    <a-text value="Schrödinger Circuit Exhibit — Version 3.8.6" align="center" color="#e3efff" width="7.4" position="0 0.08 0.02"></a-text>
+    <a-text value="Schrödinger Circuit Exhibit — Version 3.9" align="center" color="#e3efff" width="7.4" position="0 0.08 0.02"></a-text>
   </a-entity>
   <a-entity position="0 -9.2 0" billboard-y>
     <a-plane width="9.4" height="0.84" color="#07111f" material="transparent:true; opacity:0.40"></a-plane>
-    <a-text value="Back-left face remains larger and right/front face remains smaller. The back and front face struts stay unchanged, while only the four connecting struts bow inward more strongly. The cube is scaled up 5x, the front square is made less curved, and all 10 panels are kept in an even 360-degree ring with the camera pulled back so the full exhibit is easier to see." align="center" color="#b8ceff" width="8.5" position="0 0.03 0.02"></a-text>
+    <a-text value="Back-left face remains larger and right/front face remains smaller. The back and front face struts stay unchanged, while only the four connecting struts bow inward more strongly. The front square is slightly smaller and moved farther forward. The four connecting struts arc between the back and front squares like power lines, while the face edges remain only slightly convex." align="center" color="#b8ceff" width="8.5" position="0 0.03 0.02"></a-text>
   </a-entity>
 </a-scene>
 </body>
