@@ -363,52 +363,49 @@ AFRAME.registerComponent('schrodinger-cube-v38', {
       <a-image src="panels/panel_10.png?v=build25" width="18.0" height="13.5" position="0 0 0.03" material="shader: flat; transparent: true; side: double"></a-image>
     </a-entity>
   </a-entity>
-
-
-  
-
-
-  <!-- Five additional equation panels under the cube, arranged on a pentagram-like star tilted 45 degrees upward.
+  <!-- Five additional equation panels under the cube, arranged evenly 360° around the base.
+       Each panel faces the cube in yaw, then tilts 45° downward to avoid conflicting with the main upper ring.
        Expected filenames in panels/: panel_11.png ... panel_15.png -->
-  <a-entity id="underCubePentagram" position="0 -30 0" rotation="-45 0 0">
-    <!-- top star point -->
-    <a-entity position="0 24 0">
-      <a-plane width="18.2" height="5.2" color="#050b16" material="transparent:true; opacity:0.18; side:double"></a-plane>
-      <a-image src="panels/panel_11.png?v=build25" width="17.2" height="4.6" position="0 0 0.03" material="shader: flat; transparent: true; side: double"></a-image>
+  <a-entity id="lowerPanelRing">
+    <a-entity position="0.000 -30.0 -78.000" face-target-y="target: #cubeAnchor">
+      <a-entity rotation="-45 0 0">
+        <a-plane width="18.4" height="5.3" color="#050b16" material="transparent:true; opacity:0.18; side:double"></a-plane>
+        <a-image src="panels/panel_11.png?v=build27" width="17.4" height="4.74" position="0 0 0.03" material="shader: flat; transparent: true; side: double"></a-image>
+      </a-entity>
     </a-entity>
-
-    <!-- upper left star point -->
-    <a-entity position="-15.5 5.5 0">
-      <a-plane width="18.2" height="9.2" color="#050b16" material="transparent:true; opacity:0.18; side:double"></a-plane>
-      <a-image src="panels/panel_12.png?v=build25" width="17.2" height="8.6" position="0 0 0.03" material="shader: flat; transparent: true; side: double"></a-image>
+    <a-entity position="74.182 -30.0 -24.103" face-target-y="target: #cubeAnchor">
+      <a-entity rotation="-45 0 0">
+        <a-plane width="18.4" height="9.9" color="#050b16" material="transparent:true; opacity:0.18; side:double"></a-plane>
+        <a-image src="panels/panel_12.png?v=build27" width="17.4" height="9.27" position="0 0 0.03" material="shader: flat; transparent: true; side: double"></a-image>
+      </a-entity>
     </a-entity>
-
-    <!-- upper right star point -->
-    <a-entity position="15.5 5.5 0">
-      <a-plane width="18.2" height="5.2" color="#050b16" material="transparent:true; opacity:0.18; side:double"></a-plane>
-      <a-image src="panels/panel_13.png?v=build25" width="17.2" height="4.6" position="0 0 0.03" material="shader: flat; transparent: true; side: double"></a-image>
+    <a-entity position="45.847 -30.0 63.103" face-target-y="target: #cubeAnchor">
+      <a-entity rotation="-45 0 0">
+        <a-plane width="18.4" height="5.3" color="#050b16" material="transparent:true; opacity:0.18; side:double"></a-plane>
+        <a-image src="panels/panel_13.png?v=build27" width="17.4" height="4.69" position="0 0 0.03" material="shader: flat; transparent: true; side: double"></a-image>
+      </a-entity>
     </a-entity>
-
-    <!-- lower left star point -->
-    <a-entity position="-25 -11 0">
-      <a-plane width="18.2" height="9.6" color="#050b16" material="transparent:true; opacity:0.18; side:double"></a-plane>
-      <a-image src="panels/panel_14.png?v=build25" width="17.2" height="9.0" position="0 0 0.03" material="shader: flat; transparent: true; side: double"></a-image>
+    <a-entity position="-45.847 -30.0 63.103" face-target-y="target: #cubeAnchor">
+      <a-entity rotation="-45 0 0">
+        <a-plane width="18.4" height="11.2" color="#050b16" material="transparent:true; opacity:0.18; side:double"></a-plane>
+        <a-image src="panels/panel_14.png?v=build27" width="17.4" height="10.64" position="0 0 0.03" material="shader: flat; transparent: true; side: double"></a-image>
+      </a-entity>
     </a-entity>
-
-    <!-- lower right star point -->
-    <a-entity position="25 -11 0">
-      <a-plane width="18.2" height="9.6" color="#050b16" material="transparent:true; opacity:0.18; side:double"></a-plane>
-      <a-image src="panels/panel_15.png?v=build25" width="17.2" height="9.0" position="0 0 0.03" material="shader: flat; transparent: true; side: double"></a-image>
+    <a-entity position="-74.182 -30.0 -24.103" face-target-y="target: #cubeAnchor">
+      <a-entity rotation="-45 0 0">
+        <a-plane width="18.4" height="5.9" color="#050b16" material="transparent:true; opacity:0.18; side:double"></a-plane>
+        <a-image src="panels/panel_15.png?v=build27" width="17.4" height="5.32" position="0 0 0.03" material="shader: flat; transparent: true; side: double"></a-image>
+      </a-entity>
     </a-entity>
   </a-entity>
 
 <a-entity position="0 10.8 0" billboard-y>
     <a-plane width="6.2" height="0.86" color="#071121" material="transparent:true; opacity:0.50"></a-plane>
-    <a-text value="Schrödinger Circuit Exhibit — Version 3.10" align="center" color="#e3efff" width="7.4" position="0 0.08 0.02"></a-text>
+    <a-text value="Schrödinger Circuit Exhibit — Version 3.10.3" align="center" color="#e3efff" width="7.4" position="0 0.08 0.02"></a-text>
   </a-entity>
   <a-entity position="0 -10.4 0" billboard-y>
     <a-plane width="11.6" height="1.10" color="#07111f" material="transparent:true; opacity:0.42"></a-plane>
-    <a-text value="The original 10 exhibit panels remain distributed 360 degrees around the cube. Five new equation panels are added beneath the cube in a pentagram-like arrangement tilted 45 degrees upward. Place the new PNGs in the panels folder as panel_11.png through panel_15.png." align="center" color="#b8ceff" width="10.8" position="0 0.03 0.02"></a-text>
+    <a-text value="The original 10 exhibit panels remain distributed 360 degrees around the cube. Five new equation panels are added beneath the cube in an evenly spaced 360-degree lower ring. The lower ring has been moved farther outward and downward so it does not overlap the cube. Each panel still faces inward toward the cube and is tilted 45 degrees upward toward the middle of the cube. Place the new PNGs in the panels folder as panel_11.png through panel_15.png." align="center" color="#b8ceff" width="10.8" position="0 0.03 0.02"></a-text>
   </a-entity>
 </a-scene>
 </body>
