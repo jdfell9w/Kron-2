@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Schrödinger Circuit Exhibit — WebXR v3.10.10</title>
+  <title>Schrödinger Circuit Exhibit — WebXR v3.10.19</title>
   <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
   <style>
     html, body { margin: 0; width: 100%; height: 100%; background: #02040a; }
@@ -306,8 +306,7 @@ AFRAME.registerComponent('schrodinger-cube-v38', {
     this.el.setObject3D('mesh', root);
   },
   tick: function(){
-    const obj = this.el.getObject3D('mesh');
-    if (obj) obj.rotation.y += 0.00018;
+    // Rotation is now handled by the outer cubeAssembly entity so the unit vectors rotate with the cube.
   }
 });
 </script>
@@ -332,14 +331,59 @@ AFRAME.registerComponent('schrodinger-cube-v38', {
   <a-entity light="type: point; color: #5c78ff; intensity: 1.0; distance: 52" position="0 4 -12"></a-entity>
   <a-entity light="type: point; color: #c06dff; intensity: 0.82; distance: 36" position="-8 6 -2"></a-entity>
 
-  <a-entity id="rig" position="0 1.6 165">
+  <a-entity id="rig" position="0 1.6 82.5">
     <a-camera id="cam" wasd-controls-enabled="true" fov="90"></a-camera>
     <a-entity laser-controls="hand: left" move-thumbstick></a-entity>
     <a-entity laser-controls="hand: right" snap-turn></a-entity>
   </a-entity>
 
-  <a-entity schrodinger-cube-v38></a-entity>
-<a-entity id="cubeAnchor" position="0 2.6 0" visible="false"></a-entity>
+    <a-entity id="cubeAssembly" position="0 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 600000; easing: linear">
+<a-entity schrodinger-cube-v38></a-entity>
+
+  <!-- HTML-only static u1/u2/u3 triad relocated to cube center. -->
+  <a-entity id="underCubeU123" position="0 2.6 0" rotation="-10 18 0" scale="0.82 0.82 0.82">
+    <a-sphere radius="0.24" position="0 0 0" material="color:#ffffff; emissive:#88aaff; emissiveIntensity:0.92; transparent:true; opacity:0.94"></a-sphere>
+    <a-sphere radius="0.42" position="0 0 0" material="color:#88aaff; transparent:true; opacity:0.10"></a-sphere>
+
+    <!-- u1: red, sampled from the rear lower horizontal cube-edge family -->
+    <a-cylinder radius="0.100" height="0.831" position="0.415 -0.010 0.009" rotation="1.201 1.230 -91.361" material="color:#ff3333; emissive:#cc1111; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cylinder radius="0.100" height="0.830" position="1.245 -0.022 0.020" rotation="0.316 0.317 -90.196" material="color:#ff3333; emissive:#cc1111; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cylinder radius="0.100" height="0.829" position="2.075 -0.016 0.018" rotation="-0.571 -0.561 -89.000" material="color:#ff3333; emissive:#cc1111; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cylinder radius="0.100" height="0.829" position="2.903 0.007 0.003" rotation="-1.459 -1.403 -87.776" material="color:#ff3333; emissive:#cc1111; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cylinder radius="0.100" height="0.829" position="3.730 0.047 -0.024" rotation="-2.347 -2.209 -86.526" material="color:#ff3333; emissive:#cc1111; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cylinder radius="0.100" height="0.830" position="4.556 0.105 -0.065" rotation="-3.235 -2.978 -85.253" material="color:#ff3333; emissive:#cc1111; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cylinder radius="0.100" height="0.831" position="5.382 0.180 -0.118" rotation="-4.120 -3.708 -83.961" material="color:#ff3333; emissive:#cc1111; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cone radius-bottom="0.300" radius-top="0" height="0.680" position="5.794 0.221 -0.148" rotation="-4.120 -3.708 -83.961" material="color:#ff3333; emissive:#cc1111; emissiveIntensity:0.90; metalness:0.25; roughness:0.20"></a-cone>
+    <a-text value="u1" position="6.174 0.521 -0.188" align="center" color="#ff3333" width="5.2" material="shader: flat; transparent: true; depthTest: false; side: double"></a-text>
+
+    <!-- u2: green, sampled from the rear left vertical cube-edge family -->
+    <a-cylinder radius="0.100" height="0.787" position="0.080 0.385 0.011" rotation="1.638 0.169 -11.746" material="color:#33dd66; emissive:#119933; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cylinder radius="0.100" height="0.786" position="0.247 1.154 0.029" rotation="0.912 0.102 -12.796" material="color:#33dd66; emissive:#119933; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cylinder radius="0.100" height="0.786" position="0.429 1.919 0.036" rotation="0.184 0.022 -13.846" material="color:#33dd66; emissive:#119933; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cylinder radius="0.100" height="0.786" position="0.624 2.680 0.034" rotation="-0.546 -0.071 -14.896" material="color:#33dd66; emissive:#119933; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cylinder radius="0.100" height="0.786" position="0.832 3.438 0.021" rotation="-1.274 -0.178 -15.942" material="color:#33dd66; emissive:#119933; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cylinder radius="0.100" height="0.786" position="1.055 4.191 -0.001" rotation="-2.002 -0.299 -16.985" material="color:#33dd66; emissive:#119933; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cylinder radius="0.100" height="0.787" position="1.292 4.941 -0.034" rotation="-2.728 -0.433 -18.023" material="color:#33dd66; emissive:#119933; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cone radius-bottom="0.300" radius-top="0" height="0.680" position="1.414 5.315 -0.052" rotation="-2.728 -0.433 -18.023" material="color:#33dd66; emissive:#119933; emissiveIntensity:0.90; metalness:0.25; roughness:0.20"></a-cone>
+    <a-text value="u2" position="1.754 5.655 0.028" align="center" color="#33dd66" width="5.2" material="shader: flat; transparent: true; depthTest: false; side: double"></a-text>
+
+    <!-- u3: blue, sampled from the rear-to-front connector geodesic family, with extra segments for smoother curvature -->
+    <a-cylinder radius="0.095" height="0.655" position="0.185 0.028 -0.269" rotation="-65.318 -25.269 -38.551" material="color:#4488ff; emissive:#2048dd; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cylinder radius="0.095" height="0.637" position="0.556 0.097 -0.793" rotation="-61.513 -24.484 -40.065" material="color:#4488ff; emissive:#2048dd; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cylinder radius="0.095" height="0.620" position="0.930 0.194 -1.288" rotation="-57.600 -23.514 -41.472" material="color:#4488ff; emissive:#2048dd; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cylinder radius="0.095" height="0.606" position="1.309 0.318 -1.753" rotation="-53.607 -22.363 -42.736" material="color:#4488ff; emissive:#2048dd; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cylinder radius="0.095" height="0.595" position="1.692 0.471 -2.190" rotation="-49.564 -21.041 -43.824" material="color:#4488ff; emissive:#2048dd; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cylinder radius="0.095" height="0.586" position="2.078 0.650 -2.599" rotation="-45.501 -19.568 -44.707" material="color:#4488ff; emissive:#2048dd; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cylinder radius="0.095" height="0.579" position="2.468 0.857 -2.978" rotation="-41.450 -17.971 -45.361" material="color:#4488ff; emissive:#2048dd; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cylinder radius="0.095" height="0.576" position="2.862 1.092 -3.328" rotation="-37.440 -16.283 -45.775" material="color:#4488ff; emissive:#2048dd; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cylinder radius="0.095" height="0.575" position="3.260 1.354 -3.650" rotation="-33.497 -14.540 -45.944" material="color:#4488ff; emissive:#2048dd; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cylinder radius="0.095" height="0.577" position="3.662 1.644 -3.942" rotation="-29.646 -12.780 -45.876" material="color:#4488ff; emissive:#2048dd; emissiveIntensity:0.72; metalness:0.25; roughness:0.24"></a-cylinder>
+    <a-cone radius-bottom="0.300" radius-top="0" height="0.680" position="3.864 1.796 -4.081" rotation="-29.646 -12.780 -45.876" material="color:#4488ff; emissive:#2048dd; emissiveIntensity:0.90; metalness:0.25; roughness:0.20"></a-cone>
+    <a-text value="u3" position="4.144 2.076 -4.481" align="center" color="#4488ff" width="5.2" material="shader: flat; transparent: true; depthTest: false; side: double"></a-text>
+  </a-entity>
+
+  <a-entity id="cubeAnchor" position="0 2.6 0" visible="false"></a-entity>
+  </a-entity>
             <a-entity id="panelRing">
     <a-entity position="87.144 18.0 -12.247" face-target-y="target: #cubeAnchor">
       <a-plane width="19.0" height="14.2" color="#050b16" material="transparent:true; opacity:0.16; side:double"></a-plane>
@@ -420,11 +464,11 @@ AFRAME.registerComponent('schrodinger-cube-v38', {
 
 <a-entity position="0 10.8 0" billboard-y>
     <a-plane width="6.2" height="0.86" color="#071121" material="transparent:true; opacity:0.50"></a-plane>
-    <a-text value="Schrödinger Circuit Exhibit — Version 3.10.10" align="center" color="#e3efff" width="7.4" position="0 0.08 0.02"></a-text>
+    <a-text value="Schrödinger Circuit Exhibit — Version 3.10.19" align="center" color="#e3efff" width="7.4" position="0 0.08 0.02"></a-text>
   </a-entity>
   <a-entity position="0 -10.4 0" billboard-y>
     <a-plane width="11.6" height="1.10" color="#07111f" material="transparent:true; opacity:0.42"></a-plane>
-    <a-text value="The original 10 exhibit panels remain distributed 360 degrees around the cube. Five new equation panels are added beneath the cube in an evenly spaced 360-degree lower ring. The lower ring has been moved farther outward and downward so it does not overlap the cube. The lower 5 panels form an evenly spaced 360-degree ring beneath the cube, facing inward and tilted 45 degrees upward. The cube geometry has been expanded into a more volumetric projected cubical cell with longer geodesic-like connecting struts. Panel 2 remains embedded directly in the HTML." align="center" color="#b8ceff" width="10.8" position="0 0.03 0.02"></a-text>
+    <a-text value="The original 10 exhibit panels remain distributed 360 degrees around the cube. Five new equation panels are added beneath the cube in an evenly spaced 360-degree lower ring. The lower ring has been moved farther outward and downward so it does not overlap the cube. The lower 5 panels form an evenly spaced 360-degree ring beneath the cube, facing inward and tilted 45 degrees upward. The cube geometry has been expanded into a more volumetric projected cubical cell with longer geodesic-like connecting struts. A static HTML-only red/green/blue u1, u2, u3 triad has been placed under the cube with vector tips, avoiding the earlier custom-JS black-screen issue. Panel 2 remains embedded directly in the HTML." align="center" color="#b8ceff" width="10.8" position="0 0.03 0.02"></a-text>
   </a-entity>
 </a-scene>
 </body>
